@@ -1,0 +1,16 @@
+// #!/usr/bin/env ts-node
+
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",                
+        "allowJs": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "strict": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+  }
+  
