@@ -11,7 +11,7 @@ router.post('/login', userController.login)
 
 router.get('/getuser/:username', userController.getUser)
 
-router.post('/follow/:followingId', authMiddleware, followController.follow)
-router.post('/unfollow/:followingId', authMiddleware, followController.unfollow)
+router.post('/follow/:followingId', rateLimiter, authMiddleware, followController.follow)
+router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followController.unfollow)
 
 export default router
