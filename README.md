@@ -1,6 +1,6 @@
 ## YuzuNet
 
-- YuzuNet is a social media platform that focuses on creating communities around all kinds of things. Users can post, like, comment, share photos, and video. They can also create open and closed groups to build their own communities. The platform has integration with movie and book APIs for users to review and share posts about their favourite stories, authors, directors, actors, and more.
+***YuzuNet*** is a social media platform that focuses on creating communities around all kinds of things. Users can post, like, comment, share photos, and video. They can also create open and closed groups to build their own communities. The platform has integration with movie and book APIs for users to review and share posts about their favourite stories, authors, directors, actors, and more.
 Architecture
 
 - The platform is built using several technologies:
