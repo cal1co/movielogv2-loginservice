@@ -9,7 +9,7 @@ const searchController = {
     const query = req.params.usernameQuery;
     try {
         const response = await elastic.userSearch(query)
-        res.status(200).json({ message: `Search for query ${query}: ${JSON.stringify(response)}` });
+        res.status(200).json({ response });
     } catch (error) {
         res.status(500).json({ message: "Error following user", error });
     }
