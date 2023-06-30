@@ -19,7 +19,7 @@ router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followControl
 
 router.get('/search/:usernameQuery', rateLimiter, authMiddleware, searchController.searchUser)
 
-router.get('/s3test', s3Controller.getImage)
+router.get('/s3test', rateLimiter, s3Controller.getImage)
 
 
 export default router
