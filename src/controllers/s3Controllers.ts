@@ -1,4 +1,4 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Request, Response } from 'express';
 import type {Readable} from 'stream'
 
@@ -9,6 +9,7 @@ const client = new S3Client({
         secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ""
     }
 })
+
 
 const s3Controller = {
 
@@ -36,6 +37,26 @@ const s3Controller = {
           } catch (err) {
             console.error(err);
             res.status(500).send("Error retrieving image");
+          }
+    },
+
+    async uploadImage(req:Request, res: Response) {
+        console.log(req.file)
+        if (!req.file) {
+            return
+        }
+        // const blob = new Blob([req.file.buffer], { type: req.file.mimetype });
+        const command = new PutObjectCommand({
+            Bucket: "yuzu-profile-images",
+            Key: req.file.originalname,
+            Body: req.file.buffer
+        });
+        try {
+            const uploadImage = await client.send(command)
+            
+          } catch (err) {
+            console.error(err);
+            res.status(500).send("Error sending image");
           }
     }
 }

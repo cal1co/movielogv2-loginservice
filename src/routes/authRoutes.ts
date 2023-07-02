@@ -5,7 +5,9 @@ import searchController from '../controllers/searchController'
 import { rateLimiter } from '../middleware/rateLimiter';
 import { authMiddleware } from '../middleware/authMiddleware';
 import s3Controller from '../controllers/s3Controllers'
+import multer from 'multer';
 
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router()
 
@@ -20,6 +22,7 @@ router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followControl
 router.get('/search/:usernameQuery', rateLimiter, authMiddleware, searchController.searchUser)
 
 router.get('/s3test', rateLimiter, s3Controller.getImage)
+router.post('/s3test', rateLimiter, upload.single('content'), s3Controller.uploadImage)
 
 
 export default router

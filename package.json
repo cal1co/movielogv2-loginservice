@@ -26,12 +26,14 @@
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
     "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.30.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/multer": "^1.4.7",
     "@types/node": "^18.15.10",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0"
