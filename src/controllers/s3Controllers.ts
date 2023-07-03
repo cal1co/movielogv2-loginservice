@@ -41,11 +41,9 @@ const s3Controller = {
     },
 
     async uploadImage(req:Request, res: Response) {
-        console.log(req.file)
         if (!req.file) {
             return
         }
-        // const blob = new Blob([req.file.buffer], { type: req.file.mimetype });
         const command = new PutObjectCommand({
             Bucket: "yuzu-profile-images",
             Key: req.file.originalname,
