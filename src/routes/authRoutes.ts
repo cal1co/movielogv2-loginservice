@@ -21,8 +21,9 @@ router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followControl
 
 router.get('/search/:usernameQuery', rateLimiter, authMiddleware, searchController.searchUser)
 
-router.get('/s3test', rateLimiter, s3Controller.getImage)
-router.post('/s3test', rateLimiter, upload.single('content'), s3Controller.uploadImage)
+router.get('/s3image/:image', rateLimiter, s3Controller.getImage)
+router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uploadImage)
+router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
 
 
 export default router
