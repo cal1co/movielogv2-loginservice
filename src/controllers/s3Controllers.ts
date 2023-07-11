@@ -1,6 +1,6 @@
 import { GetObjectCommand, S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Request, Response } from 'express';
-import type {Readable} from 'stream'
+import type { Readable } from 'stream'
 
 const client = new S3Client({
     region: 'ap-southeast-2', 

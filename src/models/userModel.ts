@@ -1,6 +1,6 @@
 import { Pool, QueryResult } from 'pg';
 import dotenv from 'dotenv';
-import { User, UserInfoResponse } from '../utils/userTypes';
+import { User, UserInfoResponse, UserVerbose } from '../utils/userTypes';
 
 dotenv.config();
 
@@ -26,6 +26,16 @@ const userModel = {
     const result = await pool.query<QueryResult<{ id: number; username: string; email: string }>>(query);
     return result.rows[0];
   },
+
+  getUserByIdVerbose: async (id: number) => {
+    const query = {
+      text: 'SELECT username, display_name, profile_image, active_account FROM users where id = $1',
+      values: [id]
+    }
+    const result = await pool.query<QueryResult<{username: string; display_name:string; proflie_image: string; active_account: boolean}>>(query);
+    return result.rows[0]
+  },
+
   getUserByUsername: async (username: string):Promise<UserInfoResponse | undefined> => {
     const query = {
       text: 'SELECT id, username FROM users WHERE username = $1',
@@ -34,6 +44,16 @@ const userModel = {
     const result = await pool.query<UserInfoResponse>(query);
     return result.rows[0];
   },
+
+  getUserByUsernameVerbose: async (username: string) => {
+    const query = {
+      text: 'SELECT id, display_name, profile_image, active_account FROM users where username = $1',
+      values: [username]
+    }
+    const result = await pool.query<UserVerbose>(query);
+    return result.rows[0]
+  },
+
   getUserByUsernameOrEmail: async (usernameOrEmail: string):Promise<User | undefined> => {
     const query = {
       text: 'SELECT id, username, email, password FROM users WHERE username = $1 OR email = $1',

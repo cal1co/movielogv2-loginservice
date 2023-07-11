@@ -1,5 +1,6 @@
 import express from 'express';
 import userController from '../controllers/userController'
+import userPageController from '../controllers/userPageController'
 import followController from '../controllers/followController'
 import searchController from '../controllers/searchController'
 import { rateLimiter } from '../middleware/rateLimiter';
@@ -25,5 +26,7 @@ router.get('/s3image/:image', rateLimiter, s3Controller.getImage)
 router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uploadImage)
 router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
 
+router.get('/user/:id', rateLimiter, userPageController.getUser)
+// router.get('/user/:username', rateLimiter, userPageController.getUser)
 
 export default router
