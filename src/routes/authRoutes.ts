@@ -26,6 +26,6 @@ router.get('/s3image/:image', rateLimiter, s3Controller.getImage)
 router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uploadImage)
 router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
 
-router.get('/user/:id', rateLimiter, userPageController.getUser)
+router.get('/user/:id', rateLimiter, authMiddleware, userPageController.getUser)
 
 export default router

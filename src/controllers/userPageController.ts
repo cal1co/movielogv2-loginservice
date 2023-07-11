@@ -6,8 +6,10 @@ import axios, { AxiosResponse } from 'axios';
 import { fetchImage } from '../controllers/s3Controllers';
 
 type GetUserResponse = {
-    user: UserData
     posts: Post[]
+    user: UserData
+    same_user:boolean
+    following:boolean
 }
 
 const userPageController = { 
@@ -24,8 +26,9 @@ const userPageController = {
             } 
             user.profile_image = await populateImages(user.profile_image)
 
-
             user.follow_data = await userModel.getUserFollows(user.id)
+
+            const following:boolean = await userModel.isFollowing(req.user.id, user.id)
 
             const posts: Post[] | null = await getPost(user.id)
 
@@ -33,7 +36,8 @@ const userPageController = {
                 return res.status(401).json({ message: `Could not fetch posts from ${username}`})
             }
 
-            const userData: GetUserResponse = { user, posts }
+            const same_user: boolean = user.id === req.user.id
+            const userData: GetUserResponse = { user, posts, same_user, following }
       
             res.json(userData)
           } 

@@ -32,7 +32,7 @@ const userModel = {
       text: 'SELECT username, display_name, profile_image, active_account FROM users where id = $1',
       values: [id]
     }
-    const result = await pool.query<QueryResult<{username: string; display_name:string; proflie_image: string; active_account: boolean}>>(query);
+    const result = await pool.query<QueryResult<{username: string; display_name: string; proflie_image: string; active_account: boolean}>>(query);
     return result.rows[0]
   },
 
@@ -70,7 +70,17 @@ const userModel = {
     };
     const result = await pool.query<User>(query);
     return result.rows[0];
+  },
+
+  isFollowing: async(userid: number, targetid:number):Promise<boolean> => {
+    const query = {
+      text: 'SELECT EXISTS(SELECT 1 FROM followers WHERE follower_id = $1 AND following_id = $2) AS following',
+      values: [userid, targetid]
+    };
+    const result = await pool.query(query);
+    return result.rows[0]?.following ?? false;
   }
+
 };
 
 export default userModel;
