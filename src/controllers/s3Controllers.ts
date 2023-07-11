@@ -58,7 +58,7 @@ const s3Controller = {
         res.json(tempCachedImages)
     }
 }
-const fetchImage = async (key: string): Promise<string | undefined> => {
+export const fetchImage = async (key: string): Promise<string | undefined> => {
     const command: GetObjectCommand = createGetObjectCommand(key);
     const response = await client.send(command);
     const stream = response.Body as Readable;

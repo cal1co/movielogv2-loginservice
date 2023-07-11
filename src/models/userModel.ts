@@ -1,6 +1,6 @@
 import { Pool, QueryResult } from 'pg';
 import dotenv from 'dotenv';
-import { User, UserInfoResponse, UserVerbose } from '../utils/userTypes';
+import { User, UserInfoResponse, UserData, FollowData } from '../utils/userTypes';
 
 dotenv.config();
 
@@ -50,7 +50,16 @@ const userModel = {
       text: 'SELECT id, display_name, profile_image, active_account FROM users where username = $1',
       values: [username]
     }
-    const result = await pool.query<UserVerbose>(query);
+    const result = await pool.query<UserData>(query);
+    return result.rows[0]
+  },
+
+  getUserFollows: async(id:number) => {
+    const query = {
+      text: 'SELECT (SELECT COUNT(*) FROM followers WHERE follower_id = $1) AS following_count, (SELECT COUNT(*) FROM followers WHERE following_id = $1) AS follower_count',
+      values: [id]
+    }
+    const result = await pool.query<FollowData>(query);
     return result.rows[0]
   },
 
