@@ -20,9 +20,11 @@ router.get('/getuser/:username', rateLimiter, userController.getUser)
 router.post('/follow/:followingId', rateLimiter, authMiddleware, followController.follow)
 router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followController.unfollow)
 
-router.get('/search/:usernameQuery', rateLimiter, authMiddleware, searchController.searchUser)
+router.get('/search/user/:usernameQuery', rateLimiter, authMiddleware, searchController.searchUser)
+router.get('/search/post/:postContentQuery', rateLimiter, authMiddleware, searchController.searchPost)
 
 router.get('/s3image/:image', rateLimiter, s3Controller.getImage)
+router.post('/s3image/fetch/images', rateLimiter, s3Controller.getImagesById)
 router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uploadImage)
 router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
 

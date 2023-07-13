@@ -59,7 +59,7 @@ async function getPost(uid: number):  Promise<Post[] | null> {
     } 
 }
 
-async function populateImages(image:string):Promise<string> {
+export async function populateImages(image:string):Promise<string> {
     const imageData:string | undefined = await fetchImage(image);
     if (imageData === undefined) {
         return ''

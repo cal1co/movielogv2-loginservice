@@ -32,7 +32,7 @@ const userModel = {
       text: 'SELECT username, display_name, profile_image, active_account FROM users where id = $1',
       values: [id]
     }
-    const result = await pool.query<QueryResult<{username: string; display_name: string; proflie_image: string; active_account: boolean}>>(query);
+    const result = await pool.query<UserData>(query);
     return result.rows[0]
   },
 

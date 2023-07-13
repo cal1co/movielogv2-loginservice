@@ -15,36 +15,70 @@ const client = new Client({
 
 const elastic = {
 
-    formatParams(value: string) {
-        return {
-            index: 'mlv2users',
-            body: {
-                query: {
-                    fuzzy: {
-                      username: {
-                        value: value,
-                        fuzziness: "AUTO"
-                      }
+  formatParams: {
+    userSearch(value:string) {
+      return {
+        index: 'mlv2users',
+        body: {
+          query: {
+            fuzzy: {
+              username: {
+                value: value,
+                      fuzziness: "AUTO"
                     }
-                  },
-            _source: ["id", "username"]
-            },
-        }
+                  }
+                },
+                _source: ["id", "username"]
+              },
+            }
     },
+    postSearch(value:string) {
+      return {
+        index: 'posts',
+        body: {
+          query: {
+            match: {
+              post_content: {
+                query: value,
+                fuzziness: "AUTO"
+              }
+            }
+          },
+          highlight: {
+            fields: {
+              post_content: {}
+            }
+          }
+        }
 
-    async userSearch(value: string) {
-        const searchParams = elastic.formatParams(value)
-
-        const res = await client.search<SearchHit>(searchParams)
-        .catch((error) => {
-            return error
-        });
-        return res.hits.hits.map((hit: { _source: any; }) => hit._source);
-
+      }
     }
+  },
+
+  async userSearch(value: string) {
+      const searchParams = elastic.formatParams.userSearch(value)
+
+      const res = await client.search<SearchHit>(searchParams)
+      .catch((error) => {
+          return error
+      });
+      return res.hits.hits.map((hit: { _source: any; }) => hit._source);
+
+  },
+  async postSearch(value: string) {
+    const searchParams = elastic.formatParams.postSearch(value)
+    const res = await client.search(searchParams)
+    .catch((error) => {
+      return error
+    });
+    console.log(res)
+    return res.hits.hits.map((hit: { _source: any; }) => hit._source);
+
+  },
 
 
 }
 
 
 export default elastic
+

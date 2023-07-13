@@ -1,6 +1,9 @@
 import { GetObjectCommand, S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Request, Response } from 'express';
-import type { Readable } from 'stream'
+import type { Readable } from 'stream';
+import userModel from '../models/userModel';
+import { UserData } from '../utils/userTypes'
+import { populateImages } from '../controllers/userPageController'
 
 const client = new S3Client({
     region: 'ap-southeast-2', 
@@ -9,7 +12,10 @@ const client = new S3Client({
         secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ""
     }
 })
-
+type User = {
+    id: number,
+    username: string
+}
 
 const s3Controller = {
 
@@ -20,6 +26,30 @@ const s3Controller = {
             return
         }
         res.send(image)
+    },
+    async getImagesById (req: Request, res: Response) {
+        const users: User[] = req.body.users
+        try {
+            const userImages:UserData[] = []
+            for (const user of users) {
+                const userData: UserData = await userModel.getUserByIdVerbose(user.id);
+                if (!user) {
+                    // return res.status(401).json({ message: `User with username ${username} not found` });
+                }
+                if (!userData.profile_image) {
+                    userData.profile_image = "profile_default.jpg"
+                } 
+
+                userData.profile_image = await populateImages(userData.profile_image)
+
+                userImages.push(userData);
+
+            }
+
+            res.json(userImages)
+        } catch {
+            res.status(500).json("Couldn't fetch images for users")
+        }
     },
 
     async uploadImage(req:Request, res: Response) {
@@ -58,6 +88,7 @@ const s3Controller = {
         res.json(tempCachedImages)
     }
 }
+
 export const fetchImage = async (key: string): Promise<string | undefined> => {
     const command: GetObjectCommand = createGetObjectCommand(key);
     const response = await client.send(command);
