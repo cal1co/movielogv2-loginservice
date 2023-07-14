@@ -86,7 +86,42 @@ const s3Controller = {
             }
         }
         res.json(tempCachedImages)
+    },
+
+    async updateProfileImage (req: Request, res: Response) {
+        console.log("HELLO", req.file)
+        if (!req.file) {
+            return
+        }
+        const fileName:string = req.file.originalname + "-profile-image.jpg"
+        console.log(fileName)
+        const command = new PutObjectCommand({
+            Bucket: "yuzu-profile-images",
+            Key: fileName,
+            Body: req.file.buffer
+        });
+        try {
+            const uploadImage = await client.send(command)
+            console.log("img:", uploadImage)
+          } catch (err) {
+            console.error(err);
+            res.status(500).send("Error sending image");
+          }
+
+        try {
+            const success = await userModel.updateProfileImage(parseInt(req.file.originalname), fileName)
+            if (!success) {
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+            console.log(success)
+            res.json(success)
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({message: 'Internal server error'})
+        }
     }
+
+
 }
 
 export const fetchImage = async (key: string): Promise<string | undefined> => {

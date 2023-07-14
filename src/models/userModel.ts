@@ -79,8 +79,58 @@ const userModel = {
     };
     const result = await pool.query(query);
     return result.rows[0]?.following ?? false;
-  }
+  },
 
+  updateBio: async(userid: number, content: string):Promise<string> => {
+    const query = { 
+      text: 'UPDATE users SET bio = $1 WHERE id = $2 RETURNING bio',
+      values: [content, userid]
+    }
+    const result = await pool.query(query)
+    return result.rows[0]
+  },
+  updateDisplayName: async(userid: number, displayName: string):Promise<string> => {
+    const query = { 
+      text: 'UPDATE users SET display_name = $1 WHERE id = $2 RETURNING display_name',
+      values: [displayName, userid]
+    }
+    const result = await pool.query(query)
+    return result.rows[0]
+  },
+  updateUsername: async(userid: number, username: string):Promise<string> => {
+    const query = { 
+      text: 'UPDATE users SET username = $1 WHERE id = $2 RETURNING username',
+      values: [username, userid]
+    }
+    const result = await pool.query(query)
+    return result.rows[0]
+  },
+  updatePassword: async(userid: number, password: string):Promise<string> => {
+    const query = { 
+      text: 'UPDATE users SET password = $1 WHERE id = $2 RETURNING id',
+      values: [password, userid]
+    }
+    const result = await pool.query(query)
+    return result.rows[0]
+  },
+  fetchPassword: async(userid:number):Promise<string> => {
+    const query = { 
+      text: 'SELECT password FROM users WHERE id = $1',
+      values: [userid]
+    }
+    const result = await pool.query(query)
+    return result.rows[0].password
+  },
+
+
+  updateProfileImage: async(userid: number, profileImage: string):Promise<string> => {
+    const query = { 
+      text: 'UPDATE users SET profile_image = $1 WHERE id = $2 RETURNING id',
+      values: [profileImage, userid]
+    }
+    const result = await pool.query(query)
+    return result.rows[0]
+  },
 };
 
 export default userModel;

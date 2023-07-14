@@ -49,7 +49,7 @@ const userPageController = {
 
 }
 
-async function getPost(uid: number):  Promise<Post[] | null> {
+export async function getPost(uid: number):  Promise<Post[] | null> {
     try {
         const res: AxiosResponse<Post[]> = await axios.get<Post[]>(`http://localhost:8082/posts/user/${uid}`);
         return res.data;

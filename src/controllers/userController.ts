@@ -57,7 +57,84 @@ const userController = {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
-  }
+  },
+  async updateBio (req: Request, res: Response) {
+    const { bioContent } = req.body;
+    const uid = req.user.id;
+    
+    try {
+      const success = await userModel.updateBio(uid, bioContent)
+      if (!success) {
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.json(success)
+    } catch (error){
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+
+  },
+  async updateUsername (req: Request, res: Response) {
+    const { username } = req.body;
+    const uid = req.user.id;
+
+    try {
+      const success = await userModel.updateUsername(uid, username)
+      if (!success) {
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.json(success)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({message: 'Internal server error'})
+    }
+  },
+  async updateDisplayName (req: Request, res: Response) {
+    const { displayName } = req.body;
+    const uid = req.user.id;
+
+    try {
+      const success = await userModel.updateDisplayName(uid, displayName)
+      if (!success) {
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      res.json(success)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({message: 'Internal server error'})
+    }
+  },
+  async updatePassword (req: Request, res: Response) {
+    const { password, newPass } = req.body;
+    const uid = req.user.id;
+
+    const existingPasswordHashPromise = userModel.fetchPassword(uid);
+    if (!existingPasswordHashPromise) {
+      return res.status(500).json({ message: 'Couldnt fetch password information' });
+    }
+    existingPasswordHashPromise.then((existingPasswordHash: string) => {
+      bcrypt.compare(password, existingPasswordHash, async (err, isMatch) => {
+        if (isMatch) {
+          try {
+            const hashedPassword = await bcrypt.hash(newPass, 10);
+            const success = await userModel.updatePassword(uid, hashedPassword)
+            if (!success) {
+              return res.status(500).json({ message: 'Internal server error' });
+            }
+            res.json(success)
+          } catch (error) {
+            console.error(error)
+            res.status(500).json({message: 'Internal server error'})
+          }
+        } else {
+          res.status(500).json({message: "provided password does not match match"})
+        }
+      });
+    });
+  },
+  async updateProfileImage (req: Request, res: Response) {
+
+  },
 }
 
 const generateToken = (user: User) => {

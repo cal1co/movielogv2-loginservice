@@ -48,9 +48,10 @@ const elastic = {
             fields: {
               post_content: {}
             }
-          }
+          },
+          // remove this if you want all information or populate for required info needed
+          _source: ["id"]
         }
-
       }
     }
   },
@@ -71,7 +72,6 @@ const elastic = {
     .catch((error) => {
       return error
     });
-    console.log(res)
     return res.hits.hits.map((hit: { _source: any; }) => hit._source);
 
   },
