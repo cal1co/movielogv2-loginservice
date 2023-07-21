@@ -1,5 +1,5 @@
 {
-  "name": "movielogv2-loginservice",
+  "name": "yuzu-userservice",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

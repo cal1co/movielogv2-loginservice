@@ -70,6 +70,25 @@ const s3Controller = {
           }
     },
 
+    async uploadVideo(req:Request, res: Response) {
+        if (!req.file) {
+            res.status(500).send("Error: No video file provided");
+            return
+        }
+        const command = new PutObjectCommand({
+            Bucket: "yuzu-post-media",
+            Key: req.file.originalname,
+            Body: req.file.buffer
+        });
+        try {
+            const uploadImage = await client.send(command)
+            
+          } catch (err) {
+            console.error(err);
+            res.status(500).send("Error sending image");
+          }
+    },
+
     async handleMultiple (req: Request, res: Response) {
         const posts = req.body.fetchReq
         const tempCachedImages:{[key: number]: string} = {}
@@ -89,12 +108,10 @@ const s3Controller = {
     },
 
     async updateProfileImage (req: Request, res: Response) {
-        console.log("HELLO", req.file)
         if (!req.file) {
             return
         }
-        const fileName:string = req.file.originalname + "-profile-image.jpg"
-        console.log(fileName)
+        const fileName:string = req.user.id + "-" + req.file.originalname 
         const command = new PutObjectCommand({
             Bucket: "yuzu-profile-images",
             Key: fileName,
@@ -102,18 +119,16 @@ const s3Controller = {
         });
         try {
             const uploadImage = await client.send(command)
-            console.log("img:", uploadImage)
           } catch (err) {
             console.error(err);
             res.status(500).send("Error sending image");
           }
 
         try {
-            const success = await userModel.updateProfileImage(parseInt(req.file.originalname), fileName)
+            const success = await userModel.updateProfileImage(req.user.id, fileName)
             if (!success) {
                 return res.status(500).json({ message: 'Internal server error' });
             }
-            console.log(success)
             res.json(success)
         } catch (error) {
             console.error(error)

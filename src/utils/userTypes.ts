@@ -15,7 +15,8 @@ export type UserData = {
     display_name:string, 
     profile_image: string, 
     active_account: boolean,
-    follow_data: FollowData
+    follow_data: FollowData,
+    bio:string
 }
 
 

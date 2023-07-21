@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import userModel from '../models/userModel';
-import { User, UserInfoResponse } from '../utils/userTypes'
+import { User, UserInfoResponse, UserData } from '../utils/userTypes'
+import { populateImages } from '../controllers/userPageController'
+
 
 const userController = {
   async register (req: Request, res: Response) {
@@ -29,15 +31,14 @@ const userController = {
 
     try {
       const user:User | undefined = await userModel.getUserByUsernameOrEmail(usernameOrEmail);
-      if (!user) return res.status(401).json({ message: 'Invalid username or email' });
+      if (!user) return res.status(401).json({ message: "Couldn't verify login with given credentials" });
 
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(401).json({ message: 'Invalid password' });
+      if (!isMatch) return res.status(401).json({ message: "Couldn't verify login with given credentials" });
 
       const token = generateToken(user);    
       res.json({ token });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
   },
@@ -127,14 +128,30 @@ const userController = {
             res.status(500).json({message: 'Internal server error'})
           }
         } else {
-          res.status(500).json({message: "provided password does not match match"})
+          res.status(500).json({message: "provided existing password does not match"})
         }
       });
     });
   },
-  async updateProfileImage (req: Request, res: Response) {
+  async getUserData (req: Request, res:Response) {
+    const uid = req.user.id 
+    try { 
+      const user: UserData | undefined = await userModel.getUserByIdVerbose(uid)
+      if (!user) {
+        return res.status(401).json({ message: `User with id ${uid} not found` });
+      }
+      if (!user.profile_image) {
+        user.profile_image = "profile_default.jpg"
+      } 
 
-  },
+      user.profile_image = await populateImages(user.profile_image)
+      res.json(user)
+    } 
+    catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
 
 const generateToken = (user: User) => {

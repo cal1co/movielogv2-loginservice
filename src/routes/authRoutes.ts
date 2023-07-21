@@ -18,11 +18,13 @@ router.post('/login', rateLimiter, userController.login)
 router.get('/getuser/:username', rateLimiter, userController.getUser)
 router.get('/user/:id', rateLimiter, authMiddleware, userPageController.getUser)
 
+router.get('/userdata', rateLimiter, authMiddleware, userController.getUserData)
+
 router.post('/user/update/bio', rateLimiter, authMiddleware, userController.updateBio)
 router.post('/user/update/displayname', rateLimiter, authMiddleware, userController.updateDisplayName)
 router.post('/user/update/username', rateLimiter, authMiddleware, userController.updateUsername)
 router.post('/user/update/password', rateLimiter, authMiddleware, userController.updatePassword)
-router.post('/user/update/pfp', rateLimiter, authMiddleware, userController.updateProfileImage)
+// router.post('/user/update/pfp', rateLimiter, authMiddleware, userController.updateProfileImage)
 
 router.post('/follow/:followingId', rateLimiter, authMiddleware, followController.follow)
 router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followController.unfollow)
@@ -34,7 +36,7 @@ router.get('/s3image/:image', rateLimiter, s3Controller.getImage)
 router.post('/s3image/fetch/images', rateLimiter, s3Controller.getImagesById)
 router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uploadImage)
 router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
-router.post('/user/s3image/upload', rateLimiter, upload.single('content'), s3Controller.updateProfileImage)
-
+router.post('/user/s3image/upload', rateLimiter, authMiddleware, upload.single('content'), s3Controller.updateProfileImage)
+router.post('/s3video', rateLimiter, upload.single('content'), s3Controller.uploadVideo)
 
 export default router

@@ -29,7 +29,7 @@ const userModel = {
 
   getUserByIdVerbose: async (id: number) => {
     const query = {
-      text: 'SELECT username, display_name, profile_image, active_account FROM users where id = $1',
+      text: 'SELECT username, display_name, profile_image, active_account, bio FROM users where id = $1',
       values: [id]
     }
     const result = await pool.query<UserData>(query);
