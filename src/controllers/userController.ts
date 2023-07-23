@@ -151,8 +151,9 @@ const userController = {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
-  }
+  },
 }
+
 
 const generateToken = (user: User) => {
   return jwt.sign(

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import followModel from '../models/followModel'
-import { UserInfoResponse } from '../utils/userTypes'
 import { AuthenticatedRequest } from '../utils/requestTypes'
 
 const followController = {
