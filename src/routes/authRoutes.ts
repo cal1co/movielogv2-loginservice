@@ -20,24 +20,24 @@ router.post('/login', rateLimiter, userController.login)
 router.get('/getuser/:username', rateLimiter, userController.getUser)
 router.get('/user/:id', rateLimiter, authMiddleware, activityTrackerMiddleware, userPageController.getUser)
 
-router.get('/userdata', rateLimiter, authMiddleware, userController.getUserData)
+router.get('/userdata', rateLimiter, authMiddleware, activityTrackerMiddleware, userController.getUserData)
 
-router.post('/user/update/bio', rateLimiter, authMiddleware, userController.updateBio)
-router.post('/user/update/displayname', rateLimiter, authMiddleware, userController.updateDisplayName)
-router.post('/user/update/username', rateLimiter, authMiddleware, userController.updateUsername)
-router.post('/user/update/password', rateLimiter, authMiddleware, userController.updatePassword)
+router.post('/user/update/bio', rateLimiter, authMiddleware, activityTrackerMiddleware, userController.updateBio)
+router.post('/user/update/displayname', rateLimiter, authMiddleware, activityTrackerMiddleware, userController.updateDisplayName)
+router.post('/user/update/username', rateLimiter, authMiddleware, activityTrackerMiddleware, userController.updateUsername)
+router.post('/user/update/password', rateLimiter, authMiddleware, activityTrackerMiddleware, userController.updatePassword)
 
-router.post('/follow/:followingId', rateLimiter, authMiddleware, followController.follow)
-router.post('/unfollow/:followingId', rateLimiter, authMiddleware, followController.unfollow)
+router.post('/follow/:followingId', rateLimiter, authMiddleware, activityTrackerMiddleware, followController.follow)
+router.post('/unfollow/:followingId', rateLimiter, authMiddleware, activityTrackerMiddleware, followController.unfollow)
 
-router.get('/search/user/:usernameQuery', rateLimiter, authMiddleware, searchController.searchUser)
-router.get('/search/post/:postContentQuery', rateLimiter, authMiddleware, searchController.searchPost)
+router.get('/search/user/:usernameQuery', rateLimiter, authMiddleware, activityTrackerMiddleware, searchController.searchUser)
+router.get('/search/post/:postContentQuery', rateLimiter, authMiddleware, activityTrackerMiddleware, searchController.searchPost)
 
 router.get('/s3image/:image', rateLimiter, s3Controller.getImage)
 router.post('/s3image/fetch/images', rateLimiter, s3Controller.getImagesById)
 router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uploadImage)
 router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
-router.post('/user/s3image/upload', rateLimiter, authMiddleware, upload.single('content'), s3Controller.updateProfileImage)
+router.post('/user/s3image/upload', rateLimiter, authMiddleware, activityTrackerMiddleware, upload.single('content'), s3Controller.updateProfileImage)
 router.post('/s3video', rateLimiter, upload.single('content'), s3Controller.uploadVideo)
 
 export default router

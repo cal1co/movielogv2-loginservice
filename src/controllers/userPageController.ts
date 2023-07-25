@@ -31,7 +31,6 @@ const userPageController = {
             const following:boolean = await userModel.isFollowing(req.user.id, user.id)
 
             const posts: Post[] | null = await getPost(user.id)
-
             if (!posts) {
                 return res.status(401).json({ message: `Could not fetch posts from ${username}`})
             }

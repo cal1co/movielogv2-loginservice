@@ -32,13 +32,13 @@ const userController = {
     try {
       const user:User | undefined = await userModel.getUserByUsernameOrEmail(usernameOrEmail);
       if (!user) return res.status(401).json({ message: "Couldn't verify login with given credentials" });
-
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return res.status(401).json({ message: "Couldn't verify login with given credentials" });
 
       const token = generateToken(user);    
       res.json({ token });
     } catch (error) {
+      console.log("ERROR", error)
       res.status(500).json({ message: 'Internal server error' });
     }
   },
@@ -158,8 +158,7 @@ const userController = {
 const generateToken = (user: User) => {
   return jwt.sign(
     { id: user.id, username: user.username, email: user.email },
-    process.env.JWT_SECRET_KEY!,
-    { expiresIn: '3h' }
+    process.env.JWT_SECRET_KEY!
   );
 }
 

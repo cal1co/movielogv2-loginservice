@@ -14,15 +14,14 @@ export const activityTrackerMiddleware = async (req: Request, res: Response, nex
         const userId = req.user.id;
         
         if (userId) {
-            const now = Date.now();
             const lastActiveKey = `user:${userId}:lastActive`;
-            client.set(lastActiveKey, now.toString());
+            const now = Math.floor(Date.now() / 1000);
+            client.set(lastActiveKey, now);
         }
     } catch (err) {
         console.log(err)
         return
     }
-    // await client.disconnect();
     next();
 }
 
