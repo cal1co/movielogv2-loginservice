@@ -39,5 +39,7 @@ router.post('/s3image', rateLimiter, upload.single('content'), s3Controller.uplo
 router.post('/s3image/feed', rateLimiter, s3Controller.handleMultiple)
 router.post('/user/s3image/upload', rateLimiter, authMiddleware, activityTrackerMiddleware, upload.single('content'), s3Controller.updateProfileImage)
 router.post('/s3video', rateLimiter, upload.single('content'), s3Controller.uploadVideo)
+router.post('/s3image/post/media', rateLimiter, upload.array('content'), s3Controller.uploadPostMedia)
+router.post('/s3image/post/images', rateLimiter, s3Controller.getPostImages)
 
 export default router

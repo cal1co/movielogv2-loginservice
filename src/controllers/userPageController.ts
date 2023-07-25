@@ -6,7 +6,7 @@ import axios, { AxiosResponse } from 'axios';
 import { fetchImage } from '../controllers/s3Controllers';
 
 type GetUserResponse = {
-    posts: Post[]
+    // posts: Post[]
     user: UserData
     same_user:boolean
     following:boolean
@@ -30,13 +30,13 @@ const userPageController = {
 
             const following:boolean = await userModel.isFollowing(req.user.id, user.id)
 
-            const posts: Post[] | null = await getPost(user.id)
-            if (!posts) {
-                return res.status(401).json({ message: `Could not fetch posts from ${username}`})
-            }
+            // const posts: Post[] | null = await getPost(user.id)
+            // if (!posts) {
+            //     return res.status(401).json({ message: `Could not fetch posts from ${username}`})
+            // }
 
             const same_user: boolean = user.id === req.user.id
-            const userData: GetUserResponse = { user, posts, same_user, following }
+            const userData: GetUserResponse = { user, same_user, following }
       
             res.json(userData)
           } 
@@ -48,18 +48,18 @@ const userPageController = {
 
 }
 
-export async function getPost(uid: number):  Promise<Post[] | null> {
-    try {
-        const res: AxiosResponse<Post[]> = await axios.get<Post[]>(`http://localhost:8082/posts/user/${uid}`);
-        return res.data;
-    } catch (error) {
-        console.error(error);
-        return null
-    } 
-}
+// export async function getPost(uid: number):  Promise<Post[] | null> {
+//     try {
+//         const res: AxiosResponse<Post[]> = await axios.get<Post[]>(`http://localhost:8082/posts/user/${uid}`);
+//         return res.data;
+//     } catch (error) {
+//         console.error(error);
+//         return null
+//     } 
+// }
 
 export async function populateImages(image:string):Promise<string> {
-    const imageData:string | undefined = await fetchImage(image);
+    const imageData:string | undefined = await fetchImage(image, "yuzu-profile-images");
     if (imageData === undefined) {
         return ''
     }
