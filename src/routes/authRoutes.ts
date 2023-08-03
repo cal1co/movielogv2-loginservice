@@ -15,7 +15,7 @@ const router = express.Router()
 
 router.post('/register', rateLimiter, userController.register)
 router.post('/login', rateLimiter, userController.login)
-
+router.get('/user/verify', rateLimiter, authMiddleware, activityTrackerMiddleware, userController.getUserData)
 
 router.get('/getuser/:username', rateLimiter, userController.getUser)
 router.get('/user/:id', rateLimiter, authMiddleware, activityTrackerMiddleware, userPageController.getUser)

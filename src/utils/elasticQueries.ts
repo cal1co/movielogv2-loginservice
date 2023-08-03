@@ -3,7 +3,7 @@ import { UserInfoResponse } from './userTypes'
 import { SearchHit } from './elasticTypes'
 
 const client = new Client({ 
-    node: 'https://localhost:9200', 
+    node: 'https://es-users:9200', 
     auth: {
         username: "elastic",
         password: process.env.ELASTICSEARCH_PASS || "",
@@ -18,7 +18,7 @@ const elastic = {
   formatParams: {
     userSearch(value:string) {
       return {
-        index: 'mlv2users',
+        index: 'yuzuusers',
         body: {
           query: {
             fuzzy: {
@@ -75,7 +75,7 @@ const elastic = {
     return res.hits.hits.map((hit: { _source: any; }) => hit._source);
 
   },
-
+ 
 
 }
 

@@ -151,14 +151,16 @@ const userController = {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
-  },
+  }
 }
 
 
 const generateToken = (user: User) => {
+  console.log(user, process.env.JWT_SECRET_KEY as string)
   return jwt.sign(
     { id: user.id, username: user.username, email: user.email },
-    process.env.JWT_SECRET_KEY!
+    process.env.JWT_SECRET_KEY as string,
+    { algorithm: 'HS256' }
   );
 }
 

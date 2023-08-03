@@ -49,7 +49,7 @@ export async function getPost(uid: number, postList: string[], headersData: any)
   }
 
   try {
-      const res = await axios.post(`http://localhost:8082/posts/feed/${uid}`, postList, { headers });
+      const res = await axios.post(`http://yuzu-post-handler:8080/posts/feed/${uid}`, postList, { headers });
       return res.data;
   } catch (error) {
       console.error(error);

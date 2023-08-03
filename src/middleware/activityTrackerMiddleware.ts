@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { createClient } from 'redis';
 
 
-const client = createClient();
+const client = createClient({
+    url: 'redis://yuzu-post-interactions:6379'
+});
 (async () => {
     client.on('error', err => console.log('Redis Client Error', err));
     await client.connect();
